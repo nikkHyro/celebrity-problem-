@@ -1,0 +1,58 @@
+
+/*N = 3
+M[][] = {{0 1 0},
+         {0 0 0}, 
+         {0 1 0}}
+Output: 1
+Explanation: 0th and 2nd person both
+know 1. Therefore, 1 is the celebrity. 
+*/
+
+
+
+//---------------------------------------------------------------------------------------------main code :
+
+class Solution
+{ 
+    //Function to find if there is a celebrity in the party or not.
+    int celebrity(int m[][], int n)
+    {
+    Stack<Integer> st = new Stack<>();
+    for(int pushes =0;pushes<n;pushes++){
+        st.push(pushes);
+    }
+    
+    while(st.size()>1){
+       
+        int v1=st.pop(); 
+        int v2 = st.pop();
+        
+        //  v1 don't know v2 , then push to the stack back 
+        if(m[v1][v2]==0)  st.push(v1);
+        //  v2 don't know v1 ,  then puah v2 back to the stack .
+        else if(m[v2][v1]==0) st.push(v2); 
+        
+    }
+    // it can be empty if they know same person 
+    // such a example both v1 and v2 poped out now the stack could be empty if they dont push to the stack .
+    
+    if(st.size()==0) return -1;
+    
+    // pop-out the potentail 
+    int potentail = st.pop(); // this the last elem ,which could be the potentail  
+    // Now checking at the row  idx 
+    //does  potentail man know anyone  it means that person is not celebs ; 
+    for(int i=0;i<n;i++){
+        if(m[potentail][i]==1)  return -1;
+    }
+    
+    // does potentail man know anyone  in the column  
+    for(int j=0;j<n;j++){
+        if(potentail==j) continue; // if it is know itself then skip ;
+        if(m[j][potentail]==0){
+            return -1;
+        }  
+    }
+     return potentail;
+    }
+}
